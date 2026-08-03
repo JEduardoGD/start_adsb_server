@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $EUID -ne 0 ]]; then
+    echo "ERROR: This script must be run as root (use sudo)"
+    exit 1
+fi
+
 echo "============================================"
 echo "  STOPPING PERSISTENT ADS-B SERVICES"
 echo "============================================"

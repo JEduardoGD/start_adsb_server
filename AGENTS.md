@@ -13,7 +13,9 @@ ADS-B feeder management scripts for a single Debian/Ubuntu host.
 ## Gotchas
 
 - **All scripts require root** (systemctl + docker).
-- Machine-specific values live in `.env` (network adapter, timezone, coordinates, sharing key). `.env` is gitignored — copy the template below on new deployments:
+- **Scripts must be run from the repo root.** They use `./stop.sh`, `./start.sh` and `source .env` as relative paths.
+- `start.sh` and `run_persistent.sh` source `.env` inline — the file must be in the working directory.
+- Machine-specific values live in `.env` (network adapter, timezone, coordinates, AirNav Radar sharing key). `.env` is gitignored — copy the template below on new deployments:
 
       NETWORK_ADAPTER=eth0
       TZ=UTC
