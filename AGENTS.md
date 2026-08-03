@@ -25,3 +25,7 @@ ADS-B feeder management scripts for a single Debian/Ubuntu host.
       SHARING_KEY=your_sharing_key_here
 
 - `start.sh` rbfeeder uses `--rm` (ephemeral). `run_persistent.sh` rbfeeder uses `--restart unless-stopped` (no `--rm`, persistent).
+
+## Thanks
+
+Docker AirNav Radar feeder image by [sdr-enthusiasts](https://github.com/sdr-enthusiasts/docker-airnavradar).
