@@ -9,6 +9,7 @@ ADS-B feeder management scripts for a single Debian/Ubuntu host.
 - `run_persistent.sh` — enable + start fr24feed, piaware & aprsigate as persistent systemd services, then run rbfeeder as a persistent docker container. Calls `./stop.sh` then `./start.sh --skip-docker` — both must be present in the working directory.
 - `stop_persistent.sh` — disable fr24feed, piaware & aprsigate, stop systemd services, stop + delete the rbfeeder container. Calls `./stop.sh` which must be present in the working directory.
 - `stop.sh` — stop all services (systemd + docker).
+- `check_status.sh` — check whether all services (fr24feed, piaware, aprsigate, rbfeeder docker) are running. Verbose output with status, uptime, and a summary.
 
 ## Gotchas
 
