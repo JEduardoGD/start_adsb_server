@@ -11,7 +11,7 @@ echo "============================================"
 echo ""
 
 # --- Check and start fr24feed ---
-echo "[1/3] Checking fr24feed service..."
+echo "[1/4] Checking fr24feed service..."
 if systemctl is-active --quiet fr24feed; then
     echo "  -> fr24feed is already running"
 else
@@ -22,7 +22,7 @@ fi
 echo ""
 
 # --- Check and start piaware ---
-echo "[2/3] Checking piaware service..."
+echo "[2/4] Checking piaware service..."
 if systemctl is-active --quiet piaware; then
     echo "  -> piaware is already running"
 else
@@ -32,12 +32,23 @@ else
 fi
 echo ""
 
+# --- Check and start aprsigate ---
+echo "[3/4] Checking aprsigate service..."
+if systemctl is-active --quiet aprsigate; then
+    echo "  -> aprsigate is already running"
+else
+    echo "  -> Starting aprsigate..."
+    systemctl start aprsigate
+    echo "  -> aprsigate started successfully"
+fi
+echo ""
+
 if [[ "$1" == "--skip-docker" ]]; then
-    echo "[3/3] Skipping rbfeeder docker container (--skip-docker)"
+    echo "[4/4] Skipping rbfeeder docker container (--skip-docker)"
     echo ""
 else
     # --- Docker rbfeeder ---
-    echo "[3/3] Setting up rbfeeder docker container..."
+    echo "[4/4] Setting up rbfeeder docker container..."
     source .env
     IP=$(ip -4 -br addr show $NETWORK_ADAPTER | awk '{print $3}' | cut -d'/' -f1)
     echo "  -> Detected IP: $IP"

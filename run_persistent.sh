@@ -10,12 +10,12 @@ echo "  CONFIGURING PERSISTENT ADS-B SERVICES"
 echo "============================================"
 echo ""
 
-echo "[0/5] Stopping running services..."
+echo "[0/6] Stopping running services..."
 ./stop.sh
 echo ""
 
 # --- Configure fr24feed ---
-echo "[1/5] Configuring fr24feed persistence..."
+echo "[1/6] Configuring fr24feed persistence..."
 if systemctl is-enabled fr24feed > /dev/null 2>&1; then
     echo "  -> fr24feed is enabled, disabling..."
     systemctl disable fr24feed
@@ -28,7 +28,7 @@ echo "  -> fr24feed persistence configured"
 echo ""
 
 # --- Configure piaware ---
-echo "[2/5] Configuring piaware persistence..."
+echo "[2/6] Configuring piaware persistence..."
 if systemctl is-enabled piaware > /dev/null 2>&1; then
     echo "  -> piaware is enabled, disabling..."
     systemctl disable piaware
@@ -40,13 +40,26 @@ systemctl enable piaware
 echo "  -> piaware persistence configured"
 echo ""
 
+# --- Configure aprsigate ---
+echo "[3/6] Configuring aprsigate persistence..."
+if systemctl is-enabled aprsigate > /dev/null 2>&1; then
+    echo "  -> aprsigate is enabled, disabling..."
+    systemctl disable aprsigate
+else
+    echo "  -> aprsigate is not enabled, skipping disable"
+fi
+echo "  -> Re-enabling aprsigate..."
+systemctl enable aprsigate
+echo "  -> aprsigate persistence configured"
+echo ""
+
 # --- Start services ---
-echo "[3/5] Starting services..."
+echo "[4/6] Starting services..."
 ./start.sh --skip-docker
 echo ""
 
 # --- Stop existing rbfeeder ---
-echo "[4/5] Stopping existing rbfeeder docker container if any..."
+echo "[5/6] Stopping existing rbfeeder docker container if any..."
 if docker ps --format '{{.Names}}' | grep -q '^rbfeeder$'; then
     echo "  -> Stopping existing rbfeeder container..."
     docker stop rbfeeder
@@ -57,7 +70,7 @@ fi
 echo ""
 
 # --- Start persistent rbfeeder ---
-echo "[5/5] Setting up persistent rbfeeder docker container..."
+echo "[6/6] Setting up persistent rbfeeder docker container..."
 source .env
 IP=$(ip -4 -br addr show $NETWORK_ADAPTER | awk '{print $3}' | cut -d'/' -f1)
 echo "  -> Detected IP: $IP"

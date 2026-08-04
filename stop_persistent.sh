@@ -10,12 +10,12 @@ echo "  STOPPING PERSISTENT ADS-B SERVICES"
 echo "============================================"
 echo ""
 
-echo "[0/5] Stopping running services..."
+echo "[0/7] Stopping running services..."
 ./stop.sh
 echo ""
 
 # --- Disable fr24feed ---
-echo "[1/5] Disabling fr24feed persistence..."
+echo "[1/7] Disabling fr24feed persistence..."
 if systemctl is-enabled fr24feed > /dev/null 2>&1; then
     echo "  -> fr24feed is enabled, disabling..."
     systemctl disable fr24feed
@@ -26,7 +26,7 @@ echo "  -> fr24feed persistence disabled"
 echo ""
 
 # --- Disable piaware ---
-echo "[2/5] Disabling piaware persistence..."
+echo "[2/7] Disabling piaware persistence..."
 if systemctl is-enabled piaware > /dev/null 2>&1; then
     echo "  -> piaware is enabled, disabling..."
     systemctl disable piaware
@@ -36,8 +36,19 @@ fi
 echo "  -> piaware persistence disabled"
 echo ""
 
+# --- Disable aprsigate ---
+echo "[3/7] Disabling aprsigate persistence..."
+if systemctl is-enabled aprsigate > /dev/null 2>&1; then
+    echo "  -> aprsigate is enabled, disabling..."
+    systemctl disable aprsigate
+else
+    echo "  -> aprsigate is not enabled, skipping disable"
+fi
+echo "  -> aprsigate persistence disabled"
+echo ""
+
 # --- Stop fr24feed ---
-echo "[3/5] Stopping fr24feed service..."
+echo "[4/7] Stopping fr24feed service..."
 if systemctl is-active --quiet fr24feed; then
     echo "  -> Stopping fr24feed..."
     systemctl stop fr24feed
@@ -48,7 +59,7 @@ fi
 echo ""
 
 # --- Stop piaware ---
-echo "[4/5] Stopping piaware service..."
+echo "[5/7] Stopping piaware service..."
 if systemctl is-active --quiet piaware; then
     echo "  -> Stopping piaware..."
     systemctl stop piaware
@@ -58,8 +69,19 @@ else
 fi
 echo ""
 
+# --- Stop aprsigate ---
+echo "[6/7] Stopping aprsigate service..."
+if systemctl is-active --quiet aprsigate; then
+    echo "  -> Stopping aprsigate..."
+    systemctl stop aprsigate
+    echo "  -> aprsigate stopped"
+else
+    echo "  -> aprsigate is not running"
+fi
+echo ""
+
 # --- Stop and delete rbfeeder ---
-echo "[5/5] Stopping and removing rbfeeder docker container..."
+echo "[7/7] Stopping and removing rbfeeder docker container..."
 if docker ps --format '{{.Names}}' | grep -q '^rbfeeder$'; then
     echo "  -> Stopping rbfeeder container..."
     docker stop rbfeeder

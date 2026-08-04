@@ -11,7 +11,7 @@ echo "============================================"
 echo ""
 
 # --- Check and stop fr24feed ---
-echo "[1/4] Checking fr24feed service..."
+echo "[1/5] Checking fr24feed service..."
 if systemctl is-active --quiet fr24feed; then
     echo "  -> Stopping fr24feed..."
     systemctl stop fr24feed
@@ -22,7 +22,7 @@ fi
 echo ""
 
 # --- Check and stop piaware ---
-echo "[2/4] Checking piaware service..."
+echo "[2/5] Checking piaware service..."
 if systemctl is-active --quiet piaware; then
     echo "  -> Stopping piaware..."
     systemctl stop piaware
@@ -32,8 +32,19 @@ else
 fi
 echo ""
 
+# --- Check and stop aprsigate ---
+echo "[3/5] Checking aprsigate service..."
+if systemctl is-active --quiet aprsigate; then
+    echo "  -> Stopping aprsigate..."
+    systemctl stop aprsigate
+    echo "  -> aprsigate stopped successfully"
+else
+    echo "  -> aprsigate is already stopped"
+fi
+echo ""
+
 # --- Check and stop docker rbfeeder ---
-echo "[3/4] Checking rbfeeder docker container..."
+echo "[4/5] Checking rbfeeder docker container..."
 if docker ps --format '{{.Names}}' | grep -q '^rbfeeder$'; then
     echo "  -> Stopping rbfeeder docker container..."
     docker stop rbfeeder
@@ -46,7 +57,7 @@ fi
 echo ""
 
 # --- Clean up stopped rbfeeder container ---
-echo "[4/4] Cleaning up stopped rbfeeder docker container..."
+echo "[5/5] Cleaning up stopped rbfeeder docker container..."
 if docker ps -a --format '{{.Names}}' | grep -q '^rbfeeder$'; then
     echo "  -> Removing rbfeeder docker container..."
     docker rm rbfeeder
